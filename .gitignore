@@ -29,3 +29,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### custom ###
+/grobid-0.5.6/

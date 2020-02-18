@@ -1,5 +1,9 @@
 package cn.edu.whu.irlab.citation_context_data_analyze.service;
 
+import cn.edu.whu.irlab.citation_context_data_analyze.exception.LeiAnalyzerException;
+import cn.edu.whu.irlab.citation_context_data_analyze.util.TypeConverter;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -9,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
 
 /**
  * @author gcr19
@@ -24,7 +30,7 @@ public class GrobidService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public String processCitation(String citation) {
+    public String parseCitation(String citation) {
         String url = urlPrefix + "processCitation";
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -35,5 +41,7 @@ public class GrobidService {
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, request, String.class);
         return responseEntity.getBody();
     }
+
+
 
 }

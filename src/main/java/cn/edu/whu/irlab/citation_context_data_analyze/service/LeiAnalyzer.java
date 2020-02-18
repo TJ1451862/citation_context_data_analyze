@@ -4,21 +4,17 @@ import cn.edu.whu.irlab.citation_context_data_analyze.exception.LeiAnalyzerExcep
 import cn.edu.whu.irlab.citation_context_data_analyze.model.Record;
 import cn.edu.whu.irlab.citation_context_data_analyze.model.RefLabelElement;
 import cn.edu.whu.irlab.citation_context_data_analyze.model.SentenceElement;
+import cn.edu.whu.irlab.citation_context_data_analyze.util.TypeConverter;
 import org.jdom2.Attribute;
 import org.jdom2.DataConversionException;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.PatternSyntaxException;
 
@@ -33,8 +29,6 @@ public class LeiAnalyzer {
 
     private final static Logger logger = LoggerFactory.getLogger(LeiAnalyzer.class);
 
-    @Autowired
-    private GrobidService grobidService;
 
     private Element article;
     private Map<Integer, SentenceElement> sentenceElementMap;
@@ -128,15 +122,6 @@ public class LeiAnalyzer {
         return sentenceElementMap;
     }
 
-    public void parseReference() {
-        Element references = article.getChild("body").getChild("references");
-        for (Element ref :
-                references.getChildren()) {
-            ref.setName("ref");
-            String stringRef=ref.getValue();
-            grobidService.processCitation(stringRef);
-        }
-    }
 
     public List<Record> extractRecord() throws LeiAnalyzerException {
         List<Record> records = new ArrayList<>();
